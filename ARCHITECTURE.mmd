@@ -1,0 +1,62 @@
+graph TB
+    subgraph Input["📷 Input Layer"]
+        Camera["Camera/Video Input"]
+        ImageFile["Image File"]
+    end
+
+    subgraph Preprocessing["🔧 Preprocessing Layer"]
+        ImgPreprocess["Image Preprocessing<br/>(PreProcessing.py)"]
+        EllipseDetect["Ellipse Detection<br/>(Ellipse.py)"]
+        CoinCrop["Coin Crop & Resize<br/>(224x224)"]
+    end
+
+    subgraph Model["🤖 Model Layer"]
+        TeachableMachine["Teachable Machine<br/>(Model Training)"]
+        KerasModel["Keras Model<br/>(keras_model.h5)"]
+        Labels["Class Labels<br/>(labels.txt)"]
+        
+        subgraph iOS["📱 iOS Deployment"]
+            TFLite["TensorFlow Lite<br/>(coin_recognition.tflite)"]
+            SwiftApp["Swift App<br/>(CameraViewController)"]
+            TFLiteModel["TFLite Model<br/>(CoinRecognitionModel)"]
+        end
+    end
+
+    subgraph Detection["🔍 Detection Layer"]
+        Predict["Prediction Engine"]
+        ConfCheck{"Confidence<br/>Check (80%)"}
+        Real["✓ Real Coin<br/>(≥80%)"]
+        Fake["✗ Likely Fake<br/>(<80%)"]
+    end
+
+    subgraph Output["📊 Output Layer"]
+        Display["Display Result<br/>(cv2.imshow)"]
+        Console["Console Log<br/>(Print Results)"]
+    end
+
+    Camera --> ImgPreprocess
+    ImageFile --> ImgPreprocess
+    ImgPreprocess --> EllipseDetect
+    EllipseDetect --> CoinCrop
+    CoinCrop --> Predict
+    TeachableMachine -.->|Export| KerasModel
+    KerasModel --> Predict
+    Labels --> Predict
+    Predict --> ConfCheck
+    ConfCheck -->|"≥80%"| Real
+    ConfCheck -->|"<80%"| Fake
+    Real --> Display
+    Fake --> Display
+    Real --> Console
+    Fake --> Console
+
+    KerasModel -.->|"convert_to_tflite.py"| TFLite
+    TFLite -.->|"Deploy"| TFLiteModel
+    SwiftApp --> TFLiteModel
+
+    style Input fill:#ffffff,stroke:#333,stroke-width:2px
+    style Preprocessing fill:#ffffff,stroke:#333,stroke-width:2px
+    style Model fill:#ffffff,stroke:#333,stroke-width:2px
+    style Detection fill:#ffffff,stroke:#333,stroke-width:2px
+    style Output fill:#ffffff,stroke:#333,stroke-width:2px
+    style iOS fill:#ffffff,stroke:#333,stroke-width:2px

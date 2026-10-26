@@ -1,0 +1,64 @@
+graph TB
+    subgraph Input["📷 Input Layer"]
+        Camera["Camera/Video Input"]
+        ImageFile["Image File"]
+    end
+
+    subgraph DataPipeline["🗂️ Training Data Pipeline"]
+        Extract["Extract Frames<br/>(extract_frames.py)"]
+        Augment["Augmentation<br/>(augment_images.py /<br/>augment_fake_images.py /<br/>augment_images_with_labels.py)"]
+        Split["Split Dataset<br/>(split_dataset.py)"]
+        GenLabels["Generate Labels<br/>(generate_labels.py)"]
+        Dataset["dataset/<br/>(images + labels, data.yaml)"]
+        Train["Train YOLO<br/>(train_yolo.py)"]
+    end
+
+    subgraph Detection["🔍 Detection Layer"]
+        YOLO["YOLOv11 Detector<br/>(main_yolo.py)<br/>Bounding Boxes"]
+        Hybrid["Hybrid Detector<br/>(main_hybrid.py)<br/>YOLO + Ellipse Visualization"]
+    end
+
+    subgraph Model["🤖 Model Layer"]
+        YOLOModel["YOLOv11 Weights<br/>(yolo11n.pt → runs/.../best.pt)"]
+    end
+
+    subgraph Decision["⚖️ Decision Layer"]
+        ConfCheck{"Confidence<br/>Check (80%)"}
+        Real["✓ Real Coin<br/>(≥80%)"]
+        Fake["✗ Likely Fake<br/>(<80%)"]
+    end
+
+    subgraph Output["📊 Output Layer"]
+        Display["Display Result<br/>(Boxes / Ellipses)"]
+        Console["Console Log<br/>(Print Results)"]
+    end
+
+    Extract --> Augment
+    Augment --> Split
+    Split --> GenLabels
+    GenLabels --> Dataset
+    Dataset --> Train
+    Train --> YOLOModel
+
+    Camera --> YOLO
+    ImageFile --> YOLO
+    Camera --> Hybrid
+
+    YOLOModel --> YOLO
+    YOLOModel --> Hybrid
+
+    YOLO --> ConfCheck
+    Hybrid --> ConfCheck
+    ConfCheck -->|"≥80%"| Real
+    ConfCheck -->|"<80%"| Fake
+    Real --> Display
+    Fake --> Display
+    Real --> Console
+    Fake --> Console
+
+    style Input fill:#ffffff,stroke:#333,stroke-width:2px
+    style DataPipeline fill:#ffffff,stroke:#333,stroke-width:2px
+    style Model fill:#ffffff,stroke:#333,stroke-width:2px
+    style Detection fill:#ffffff,stroke:#333,stroke-width:2px
+    style Decision fill:#ffffff,stroke:#333,stroke-width:2px
+    style Output fill:#ffffff,stroke:#333,stroke-width:2px

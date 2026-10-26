@@ -1,0 +1,259 @@
+1
+00:00:14,050 --> 00:00:15,780
+NBC Connecticut bought four
+
+2
+00:00:15,790 --> 00:00:17,482
+American Silver Eagles online.
+
+3
+00:00:17,492 --> 00:00:20,540
+A lab found all four were mostly copper.
+
+4
+00:00:36,070 --> 00:00:36,930
+I'm Justin.
+
+5
+00:00:36,940 --> 00:00:37,861
+I built EagleEye.
+
+6
+00:00:37,871 --> 00:00:39,432
+Point your phone at a coin
+
+7
+00:00:39,442 --> 00:00:40,650
+and it tells you what it is
+
+8
+00:00:40,660 --> 00:00:42,230
+and whether it is genuine.
+
+9
+00:00:42,310 --> 00:00:43,820
+Everything runs on the phone.
+
+10
+00:00:44,260 --> 00:00:45,867
+Here we have three coins in a row
+
+11
+00:00:45,877 --> 00:00:47,420
+to showcase our demonstration.
+
+12
+00:00:47,440 --> 00:00:50,180
+The first one is a Silver Eagle.
+
+13
+00:00:50,200 --> 00:00:51,720
+It isn't just Eagles, though.
+
+14
+00:00:51,730 --> 00:00:53,730
+This one is a genuine Morgan coin
+
+15
+00:00:53,740 --> 00:00:55,500
+and the last one is a fake.
+
+16
+00:00:55,510 --> 00:00:57,630
+As you can see, our program is able
+
+17
+00:00:57,640 --> 00:00:59,270
+to detect which one's which.
+
+18
+00:00:59,470 --> 00:01:00,800
+How was it made, though?
+
+19
+00:01:00,910 --> 00:01:02,690
+Let me guide you through the process.
+
+20
+00:01:03,640 --> 00:01:05,100
+First of all, coins are filmed
+
+21
+00:01:05,110 --> 00:01:05,820
+and then frames are
+
+22
+00:01:05,830 --> 00:01:06,870
+extracted from the video
+
+23
+00:01:06,880 --> 00:01:08,100
+giving us training data.
+
+24
+00:01:08,110 --> 00:01:11,730
+This was around one hundred images per coin.
+
+25
+00:01:12,340 --> 00:01:13,890
+Next, I trained a model to tell what
+
+26
+00:01:13,900 --> 00:01:16,070
+genuine Silver Eagles, Morgans
+
+27
+00:01:16,120 --> 00:01:17,250
+and Peace dollars look like
+
+28
+00:01:17,260 --> 00:01:19,460
+using a Keras model and Teachable Machine.
+
+29
+00:01:21,430 --> 00:01:22,980
+After that, I created the model
+
+30
+00:01:22,990 --> 00:01:24,590
+to run easily on a phone
+
+31
+00:01:24,850 --> 00:01:25,710
+and it's small and compact
+
+32
+00:01:25,720 --> 00:01:28,790
+using only around 680 kilobytes of storage.
+
+33
+00:01:29,620 --> 00:01:31,290
+Now we have a Swift camera app
+
+34
+00:01:31,300 --> 00:01:32,190
+that finds the coin
+
+35
+00:01:32,200 --> 00:01:33,660
+and crops it using OpenCV
+
+36
+00:01:33,670 --> 00:01:36,890
+to a size of 224 by 224 pixels.
+
+37
+00:01:37,330 --> 00:01:38,430
+Here's a full flowchart.
+
+38
+00:01:38,440 --> 00:01:41,300
+It takes a live feed on the phone, finds it
+
+39
+00:01:41,860 --> 00:01:44,840
+crops it, uses the model
+
+40
+00:01:44,890 --> 00:01:46,730
+from before to score it
+
+41
+00:01:46,930 --> 00:01:49,200
+and if the confidence is above 90%
+
+42
+00:01:49,210 --> 00:01:51,710
+bingo, your coin is likely genuine.
+
+43
+00:01:53,050 --> 00:01:55,505
+This is the whole flowchart
+
+44
+00:01:56,590 --> 00:01:58,910
+and this was the whole process.
+
+45
+00:02:02,680 --> 00:02:04,380
+Before landing on this pipeline
+
+46
+00:02:04,390 --> 00:02:06,320
+I also tried a YOLO detector.
+
+47
+00:02:06,430 --> 00:02:08,340
+I trained it on about 600 photos
+
+48
+00:02:08,350 --> 00:02:09,572
+to tell real from fake.
+
+49
+00:02:09,582 --> 00:02:11,720
+Its scores looked great
+
+50
+00:02:11,730 --> 00:02:14,722
+but YOLO looks at the whole camera view
+
+51
+00:02:14,732 --> 00:02:15,970
+background included.
+
+52
+00:02:15,980 --> 00:02:18,311
+In my photos, every real coin was
+
+53
+00:02:18,321 --> 00:02:20,940
+in a slab and every fake one was loose
+
+54
+00:02:20,950 --> 00:02:21,750
+so it could learn the
+
+55
+00:02:21,760 --> 00:02:23,580
+background instead of the coin.
+
+56
+00:02:23,590 --> 00:02:25,200
+That's why the final app crops
+
+57
+00:02:25,210 --> 00:02:26,910
+tightly to the coin first.
+
+58
+00:02:26,920 --> 00:02:29,520
+Next, I'll retrain it on matched photos
+
+59
+00:02:29,530 --> 00:02:31,680
+test it on coins it's never seen
+
+60
+00:02:31,690 --> 00:02:33,709
+and bring it into the app.
+
+61
+00:02:34,030 --> 00:02:37,010
+EagleEye is a screening tool, not a certificate.
+
+62
+00:02:37,060 --> 00:02:39,690
+Right now it knows Silver Eagles, Morgans
+
+63
+00:02:39,700 --> 00:02:42,350
+and Peace dollars, and more coins are next.
+
+64
+00:02:42,460 --> 00:02:44,840
+Make sure to look twice before you pay once.
+
+65
+00:02:44,890 --> 00:02:45,800
+Thank you.

@@ -1,0 +1,8 @@
+platform :ios, '14.0'
+
+target 'CoinRecognition' do
+  # TensorFlow Lite for inference
+  pod 'TensorFlowLiteSwift'
+  
+  # Vision framework is built-in
+end
